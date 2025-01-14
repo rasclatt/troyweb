@@ -70,5 +70,5 @@ const handleImageError = () => {
         
         </div>
     </div>
-    <FooterComponent />
+    <FooterComponent skipMargin />
 </template>

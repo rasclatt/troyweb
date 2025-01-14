@@ -19,7 +19,7 @@
                                         <font-awesome-icon icon="spinner" class="animate-spin text-4xl text-orange-500" />
                                     </div>
 
-                                    <div v-if="!book.action || book.action === 'signed_in'" class="full-width mt-4"><font-awesome-icon icon="circle-check" />&nbsp;Available. <a href="/login" class="text-orange-500">Login</a> to borrow this book.</div>
+                                    <div v-if="!book.action || book.action === 'signed_in'" class="full-width mt-4"><font-awesome-icon icon="circle-check" />&nbsp;Available. <span v-if="!$page.props.auth.user"><a href="/login" class="text-orange-500">Login</a> to borrow this book.</span></div>
                                     <div v-if="book.action === 'signed_out'" class="full-width mt-4"><font-awesome-icon icon="triangle-exclamation" />&nbsp;All copies are currently signed out.<br /><span class="font-semibold italic text-orange-500">The item is due to be returned on {{toDate(book.action_date)}}.</span></div>
                                 </div>
                             </div>

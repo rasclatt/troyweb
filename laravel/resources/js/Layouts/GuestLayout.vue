@@ -9,8 +9,8 @@
                 <slot />
             </div>
         </div>
-        <FooterComponent />
     </div>
+    <FooterComponent skipMargin />
 </template>
 
 <script lang="ts">
@@ -21,6 +21,7 @@ import FooterComponent from '@/Layouts/Components/Footer.vue';
 export default defineComponent({
     components: {
         LogoBlock,
+        FooterComponent
     },
 });
 </script>
