@@ -35,3 +35,5 @@
 7. **Access the application with the following admin credentials:**
    - **Username:** admin@example.com
    - **Password:** admin
+  
+8. It's important to note that the `.env.public` should be renamed to just `.env`. It contains all localhost settings for the project.
