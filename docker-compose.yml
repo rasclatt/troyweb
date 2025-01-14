@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+    app:
+        build:
+            context: .
+            dockerfile: php-composer
+        container_name: laravel
+        ports:
+            - "81:80"
+        volumes:
+            - ./laravel:/var/www/html
+        working_dir: /var/www/html
+        environment:
+            - APACHE_DOCUMENT_ROOT=/var/www/html/public
+        command: bash -c "composer install && apache2-foreground"
+        depends_on:
+            - node
+            - sqlite
+
+    node:
+        build:
+            context: .
+            dockerfile: node-composer
+        image: node:20
+        container_name: node
+        working_dir: /var/www/html
+        volumes:
+            - ./laravel:/var/www/html
+            - ./node_modules:/var/www/html/node_modules
+        ports:
+          - "5173:5173"
+        command: bash -c "npm install && npm run dev"
+
+    sqlite:
+        image: nouchka/sqlite3
+        container_name: sqlite
+        command: tail -f /dev/null
+        volumes:
+            - ./laravel/database:/var/www/html/database
+
+volumes:
+    database:

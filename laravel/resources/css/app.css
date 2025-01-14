@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.col-count-3.offset {
+    display: grid !important;
+    grid-template: 1fr / 1fr 1200px 1fr;
+    gap: 1em;
+}
+@media screen and (max-width: calc(1200px + 4em)) {
+    .col-count-3.offset {
+        grid-template: 1fr / 0px 1fr 0px !important;
+   }
+}
+.col-count-3 {
+    gap: 1em;
+}
+.start2 {
+    grid-column-start: 2;
+}

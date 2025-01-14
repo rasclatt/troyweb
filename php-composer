@@ -1,0 +1,54 @@
+FROM php:8.2-apache
+
+COPY php.ini /usr/local/etc/php/
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    zip \
+    unzip \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev \
+    && docker-php-ext-install pdo_mysql
+
+# COPY ./php-node-install.sh /usr/local/bin/php-node-install.sh
+# RUN chmod +x /usr/local/bin/php-node-install.sh
+# RUN /usr/local/bin/php-node-install.sh
+
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy existing application directory contents
+COPY ./laravel /var/www/html
+
+# Set document root to public directory
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+
+# Enable Apache mod_rewrite
+RUN a2enmod rewrite
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# Update the default Apache site configuration to use the new document root
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
+
+# Set correct permissions
+RUN chown -R www-data:www-data /var/www/html/public
+RUN chmod -R 775 /var/www/html/public
+
+# Ensure Apache can read the files
+RUN find /var/www/html/public -type f -exec chmod 644 {} \;
+RUN find /var/www/html/public -type d -exec chmod 755 {} \;
+
+# Expose port 81
+EXPOSE 81
+
+# Start Apache server
+CMD ["apache2-foreground"]

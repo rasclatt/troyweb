@@ -1,0 +1,74 @@
+[
+    {
+        "type": "api",
+        "properName": "Users",
+        "route": "/api/users/{id?}",
+        "methods": ["get","delete","update","save"],
+        "middleware": ["auth", "check.user.admin", "decrypt.ids", "encrypt.ids"],
+        "controller": "App\\Http\\Controllers\\UserAdminController",
+        "name": "users.admin"
+    },
+    {
+        "type": "api",
+        "properName": "Books",
+        "route": "/api/books/{id?}",
+        "methods": ["get","delete","update","save"],
+        "middleware": ["auth", "check.user.staff", "decrypt.ids", "encrypt.ids"],
+        "controller": "App\\Http\\Controllers\\BooksController",
+        "name": "books"
+    },
+    {
+        "type": "api",
+        "properName": "SiteSettings",
+        "route": "/api/site-settings/{id?}",
+        "methods": ["get","delete","update","save"],
+        "middleware": ["auth", "check.user.admin", "decrypt.ids", "encrypt.ids"],
+        "controller": "App\\Http\\Controllers\\SiteSettingsController",
+        "name": "site.settings"
+    },
+    {
+        "type": "api",
+        "properName": "RandomBooks",
+        "route": "/api/random-books",
+        "methods": ["get"],
+        "middleware": ["decrypt.ids", "encrypt.ids"],
+        "controller": "App\\Http\\Controllers\\RandomBooksController",
+        "name": "random.books"
+    },
+    {
+        "type": "web",
+        "properName": "BookDetails",
+        "route": "/book-details/{id?}",
+        "methods": ["get"],
+        "middleware": ["decrypt.ids", "encrypt.ids"],
+        "controller": "App\\Http\\Controllers\\BooksController",
+        "name": "books.details"
+    },
+    {
+        "type": "api",
+        "properName": "BookReviews",
+        "route": "/api/book-reviews/{id?}",
+        "methods": ["get", "save"],
+        "middleware": ["decrypt.ids", "encrypt.ids"],
+        "controller": "App\\Http\\Controllers\\BookReviewController",
+        "name": "books.reviews"
+    },
+    {
+        "type": "api",
+        "properName": "BookRental",
+        "route": "/api/rental/{id?}",
+        "methods": ["get", "save", "update"],
+        "middleware": ["decrypt.ids", "encrypt.ids"],
+        "controller": "App\\Http\\Controllers\\BookRentalController",
+        "name": "books.rental"
+    },
+    {
+        "type": "api",
+        "properName": "MyBookRental",
+        "route": "/api/my-rentals",
+        "methods": ["get"],
+        "middleware": ["auth", "decrypt.ids", "encrypt.ids"],
+        "controller": "App\\Http\\Controllers\\MyBookRentalController",
+        "name": "books.myrental"
+    }
+]
