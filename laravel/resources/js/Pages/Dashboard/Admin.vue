@@ -26,7 +26,7 @@
                     <td v-if="!user.deleted_at" class="p-2"><span class="inline-block w-3 h-3 bg-green-500 rounded-full"></span></td>
                     <td class="p-2">{{ user.first_name }} {{ user.last_name }}</td>
                     <td class="p-2">{{ user.email }}</td>
-                    <td class="p-2">{{ user.rid && roles[Number(user.rid)] }}</td>
+                    <td class="p-2">{{ user.rid && roles[user.rid] }}</td>
                     <td class="p-2 flex justify-end gap-2">
                         <button class="border border-gray-300 text-gray-700 rounded-lg px-2 py-1 text-xs hover:bg-gray-300 transition duration-300" @click="showEditUserModal(user)">Edit</button>
                         
@@ -124,7 +124,7 @@ export default defineComponent({
             updated_at: '',
         };
         const users = ref<IUser[]>([]);
-        const roles = ref<{ [key: number]: string }>({});
+        const roles = ref<{ [key: string]: string }>({});
         const error = ref<string | null>(null);
         const showModal = ref(false);
         const isEditMode = ref(false);
