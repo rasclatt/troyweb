@@ -4,7 +4,8 @@ namespace App\Services;
 use App\Helpers\SiteSetting as SiteSettingHelper;
 use App\Models\Books;
 use Illuminate\Support\Facades\ {
-    Cache
+    Cache,
+    DB
 };
 
 class SiteSetting
@@ -27,8 +28,17 @@ class SiteSetting
         return Cache::rememberForever(
             'site-random-books',
             function() {
+                $ba = 'books_ratings';
                 $count = SiteSettingHelper::getBookRandomCount();
-                return Books::inRandomOrder()->limit($count)->get();
+                return Books::inRandomOrder()
+                    ->leftJoin('books_ratings', 'books.id', '=', 'books_ratings.bid')
+                    ->limit($count)
+                    ->addSelect([
+                        'books.*',
+                        DB::raw('AVG(books_ratings.rating) as average_rating')
+                    ])
+                    ->groupBy('books.id')
+                    ->get();
             }
         );
     }

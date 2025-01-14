@@ -12,4 +12,5 @@ export interface IBook
     publication_date: string;
     created_at: string;
     updated_at: string;
+    average_rating?: number;
 }

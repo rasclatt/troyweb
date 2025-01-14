@@ -42,7 +42,8 @@
                             <div v-for="rating in ratings" :key="rating.id" class="border-t border-gray-300 py-2">
                                 <div class="flex justify-stretch">
                                     <div>
-                                        <p class="text-xs "><font-awesome-icon icon="star" class="text-orange-500" v-for="star in rating.rating" :key="star" /> - {{ new Date(rating.created_at).toLocaleDateString() }}</p>
+                                        <p class="text-xs ">
+                                            <StarRatings :rating="rating.rating" /> - {{ new Date(rating.created_at).toLocaleDateString() }}</p>
                                         
                                         <h1 class="text-xl">{{ rating.title }}</h1>
                                         <div class="border-top pt-3 mt-3">
@@ -104,13 +105,15 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import ModalComponent from '@/Components/ModalComponent.vue';
 import axios from 'axios';
 import AllBooksSearch from '@/Components/AllBooksSearch.vue';
+import StarRatings from '@/Components/StarRatings.vue';
 
 export default defineComponent({
     name: 'BookDetails',
     components: {
         AuthenticatedLayout,
         AllBooksSearch,
-        ModalComponent
+        ModalComponent,
+        StarRatings,
     },
   setup() {
     const { props } = usePage<any>();

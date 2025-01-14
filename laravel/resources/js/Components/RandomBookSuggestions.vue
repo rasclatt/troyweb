@@ -9,6 +9,9 @@
                     <div class="p-4 row-span-1 bg-gray-200 bg-opacity-50 backdrop-blur">
                         <h6 class="font-semibold">Title: {{ book.title }}</h6>
                         <p class="text-sm">Author: {{ book.author }}</p>
+                        <div v-if="book?.average_rating || 0 > 0" class="flex items">
+                          <StarRatings :rating="book.average_rating || 0" />
+                        </div>
                     </div>
                     <div class="p-4 row-span-1 bg-gray-200 bg-opacity-50">
                         <div class="flex justify-center">
@@ -28,9 +31,13 @@ import { IBook } from '@/Interfaces/IBooks';
 import axios from 'axios';
 import { defineComponent, onMounted, ref } from 'vue';
 import { route } from 'ziggy-js';
+import StarRatings from './StarRatings.vue';
 
 export default defineComponent({
   name: 'RandomBookSuggestions',
+  components: {
+    StarRatings
+  },
   props: {
     randomBooks: {
       type: Array as () => Array<IBook>,

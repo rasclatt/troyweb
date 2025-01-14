@@ -13,7 +13,8 @@ class RandomBooksController extends Controller
     public function get(Request $request)
     {
         return $this->tryCatch(function() {
-            return $this->toSuccessfulResponse(app(\App\Services\SiteSetting::class)->getRandomBooks(), false, 'data', ['loggedIn' => Auth::check() ]);
+            return $this->toSuccessfulResponse(app(\App\Services\SiteSetting::class)
+                ->getRandomBooks(), false, 'data', ['loggedIn' => Auth::check() ]);
         });
     }
 }
