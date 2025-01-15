@@ -27,6 +27,7 @@ export default defineComponent({
         const toast = useToast();
         const books = ref<IBook[]>([]);
         const searchQuery = ref<string>('');
+        const order = ref<boolean>(true);
 
         const clearSearch = () => {
             searchQuery.value = '';
@@ -56,6 +57,7 @@ export default defineComponent({
             clearSearch,
             fetchBooks,
             searchBooks,
+            order
         };
     }
 });

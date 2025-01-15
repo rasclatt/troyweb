@@ -4,7 +4,7 @@
         <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-4">
             <li v-for="book in randomBooks" :key="book.id" class="border mb-4 rounded-md shadow-md  h-[500px] overflow-hidden relative zoom-in-on-hover">
                 <div class="rounded-md overflow-hidden" :style="{ backgroundImage: `url(${book.cover_image})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }"></div>
-                <div class="grid h-full" style="grid-template-rows: 350px 1fr auto; background-color: transparent; z-index: 2; position: relative;">
+                <div class="grid h-full" style="grid-template-rows: 300px 1fr auto; background-color: transparent; z-index: 2; position: relative;">
                     <div></div>
                     <div class="p-4 row-span-1 bg-gray-200 bg-opacity-50 backdrop-blur">
                         <h6 class="font-semibold">Title: {{ book.title }}</h6>

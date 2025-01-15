@@ -218,7 +218,7 @@ export default defineComponent({
         closeModal,
         submitReview,
         borrowBook,
-        toDate
+        toDate,
     };
   }
 });
