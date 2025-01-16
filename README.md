@@ -37,3 +37,10 @@
    - **Password:** admin
   
 8. It's important to note that the `.env.public` should be renamed to just `.env`. It contains all localhost settings for the project.
+
+# Patching Release 0.0.1
+If you are not downloading the main from scratch, you can patch it using the command:
+```shell
+php artisan setup:patch
+```
+This, of course, needs to be done inside the `app` container.
