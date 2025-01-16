@@ -12,15 +12,17 @@
                                 <h1 class="text-4xl text-orange-800">{{ book.title }}</h1>
                                 <p>by {{ book.author }}</p>
                                 <p v-if="book.average_rating" >{{ book.average_rating }} <font-awesome-icon icon="star" class="text-orange-500" /> Member Rating</p>
-
                                 <div>
-                                    <button v-if="!borrowing && (!book.action || book.action === 'signed_in')" class="text-white mt-4 px-3 py-2 rounded-lg transition duration-300" :class="{'hover:bg-orange-600 bg-orange-500': $page.props.auth.user, 'bg-gray-300 hover:bg-gray-200': !$page.props.auth.user }" :disabled="!$page.props.auth.user" type="button" @click="borrowBook">One-Click Borrow</button>
+                                    <button v-if="$page.props.auth.user.other_attributes.role !== 'librarian' && !borrowing && (!book.action || book.action === 'signed_in')" class="text-white mt-4 px-3 py-2 rounded-lg transition duration-300" :class="{'hover:bg-orange-600 bg-orange-500': $page.props.auth.user, 'bg-gray-300 hover:bg-gray-200': !$page.props.auth.user }" :disabled="!$page.props.auth.user" type="button" @click="borrowBook">One-Click Borrow</button>
                                     <div v-if="borrowing" class=" mt-4">
                                         <font-awesome-icon icon="spinner" class="animate-spin text-4xl text-orange-500" />
                                     </div>
-
                                     <div v-if="!book.action || book.action === 'signed_in'" class="full-width mt-4"><font-awesome-icon icon="circle-check" />&nbsp;Available. <span v-if="!$page.props.auth.user"><a href="/login" class="text-orange-500">Login</a> to borrow this book.</span></div>
-                                    <div v-if="book.action === 'signed_out'" class="full-width mt-4"><font-awesome-icon icon="triangle-exclamation" />&nbsp;All copies are currently signed out.<br /><span class="font-semibold italic text-orange-500">The item is due to be returned on {{toDate(book.action_date)}}.</span></div>
+                                    <div v-if="book.action === 'signed_out'" class="full-width mt-4">
+                                        <font-awesome-icon icon="triangle-exclamation" />&nbsp;All copies are currently signed out.<br />
+                                        <span v-if="!overDue" class="font-semibold italic text-orange-500">The item is due to be returned on {{toDate(book.action_date)}}.</span>
+                                        <span v-if="overDue" class="font-semibold italic text-red-500">This item is overdue and should be back in stock shortly.</span>
+                                    </div>
                                 </div>
                             </div>
                             <h1 class="text-2xl text-orange-800 mt-6">Overview</h1>
@@ -106,6 +108,7 @@ import ModalComponent from '@/Components/ModalComponent.vue';
 import axios from 'axios';
 import AllBooksSearch from '@/Components/AllBooksSearch.vue';
 import StarRatings from '@/Components/StarRatings.vue';
+import { isOverDue } from '@/Helpers/Books';
 
 export default defineComponent({
     name: 'BookDetails',
@@ -125,6 +128,7 @@ export default defineComponent({
     const modalVisible = ref<boolean>(false);
     const ready = ref<boolean>(false);
     const borrowing = ref<boolean>(false);
+    const overDue = ref<boolean>(false);
 
     const getLastPathSegment = (): string | undefined => {
         const url: string = window.location.href;
@@ -204,7 +208,9 @@ export default defineComponent({
         getBookRatings();
     });
 
-    console.log('Book:', book.value);
+    if(book.value.action_date && book.value.action === 'signed_out') {
+        overDue.value = isOverDue(book.value.action_date);
+    }
     
     return {
         book,
@@ -214,6 +220,7 @@ export default defineComponent({
         ratedByMe,
         ready,
         borrowing,
+        overDue,
         openModal,
         closeModal,
         submitReview,

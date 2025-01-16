@@ -38,6 +38,7 @@ class FirstRunSetup extends Command
             'SiteSettings',
             'Books',
             'Users',
+            'BooksTypes',
         ] as $seed) {
             $this->info('Seeding database...');
             Artisan::call('db:seed', ['--class' => $seed]);

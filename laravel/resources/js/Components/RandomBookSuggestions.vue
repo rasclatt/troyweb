@@ -28,9 +28,9 @@
 
 <script lang="ts">
 import { IBook } from '@/Interfaces/IBooks';
-import axios from 'axios';
 import { defineComponent, onMounted, ref } from 'vue';
 import { route } from 'ziggy-js';
+import axios from 'axios';
 import StarRatings from './StarRatings.vue';
 
 export default defineComponent({

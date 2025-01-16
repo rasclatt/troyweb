@@ -25,6 +25,16 @@ class User extends Authenticatable
         'password',
     ];
 
+    protected $appends = ['other_attributes'];
+
+    public function getOtherAttributesAttribute(array | string $item = null)
+    {
+        $role = Role::find($this->rid);
+        return [
+            'role' => $role->type,
+            'role_id' => $role->id,
+        ];
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -35,10 +35,15 @@ class Books extends Model
      *
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public static function getAllBooks()
+    public static function getAllBooks($encode = true)
     {
         $ba = 'books_availability';
-        return self::leftJoin($ba, function($join) use ($ba) {
+        return array_map(function($v) use ($encode) {
+            if(!$encode)
+                return $v;
+            $v['category'] = EncryptIds::enc($v['category']);
+            return $v;
+        }, self::leftJoin($ba, function($join) use ($ba) {
             $join->on('books.id', '=', $ba.'.bid')
                  ->whereNull($ba.'.deleted_at');
             })
@@ -46,13 +51,16 @@ class Books extends Model
                 'books.*',
                 $ba.'.action_date as action_date',
                 $ba.'.action as action',
-                DB::raw('AVG(books_ratings.rating) as average_rating')
+                DB::raw('AVG(books_ratings.rating) as average_rating'),
+                'books_types.title as category_title',
+                'books_types.shortcode as category_shortcode',
             ])
             ->leftJoin('books_ratings', 'books_ratings.bid', '=', 'books.id')
+            ->leftJoin('books_types', 'books.category', '=', 'books_types.id')
             ->whereNull('books.deleted_at')
             ->groupBy('books.id', $ba.'.action_date', $ba.'.action')
             ->get()
-            ->toArray();
+            ->toArray());
     }
     /**
      * Get all books from the books table.
@@ -70,8 +78,11 @@ class Books extends Model
             'books.*',
             $ba.'.action_date as action_date',
             $ba.'.action as action',
-            DB::raw('AVG(books_ratings.rating) as average_rating')
+            DB::raw('AVG(books_ratings.rating) as average_rating'),
+            'books_types.title as category_title',
+            'books_types.shortcode as category_shortcode',
         ])
+        ->leftJoin('books_types', 'books.category', '=', 'books_types.id')
         ->leftJoin('books_ratings', 'books_ratings.bid', '=', 'books.id')
         ->whereNull('books.deleted_at');
         if($search)
@@ -86,7 +97,7 @@ class Books extends Model
      * @param int $id
      * @return \Illuminate\Database\Eloquent\Model|static|null
      */
-    public static function getBookById($id, bool $encode = false)
+    public static function getBookById($id, bool $encodeUser = false, $encodeCategory = true)
     {
         $ba = 'books_availability';
         $book = self::leftJoin($ba, function($join) use ($ba) {
@@ -104,8 +115,10 @@ class Books extends Model
             ->whereNull('books.deleted_at')
             ->groupBy('books.id', $ba.'.action_date', $ba.'.action')
             ->first();
-        if(!$encode)
-            return $book;
+        if($encodeCategory)
+            $book->category = EncryptIds::enc($book->category);
+        if(!$encodeUser)
+        return $book;
         $book->id = EncryptIds::enc($book->id);
         return $book;
     }

@@ -91,8 +91,7 @@
                                 <div class="mb-4">
                                     <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
                                     <select id="category" v-model="form.category" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
-                                        <option value="fiction">Fiction</option>
-                                        <option value="non_fiction">Non-Fiction</option>
+                                        <option v-for="(label, value) in categoryTypes" :key="label.id" :value="label.id">{{ label.title }}</option>
                                     </select>
                                 </div>
                                 <div class="mb-4">
@@ -140,6 +139,7 @@ export default defineComponent({
     setup() {
         const toast = useToast();
         const form = ref<{[k: string]: any}>({});
+        const categoryTypes = ref({} as any);
         const books = ref<any[]>([]);
         const modalActive = ref<boolean>(false);
         const fileInput = ref<HTMLInputElement | null>(null);
@@ -175,6 +175,9 @@ export default defineComponent({
                         form.value = response.data.data;
                     else
                         books.value = response.data.data;
+
+                    categoryTypes.value = response.data.types;
+
                     if(func)
                         func(response?.data);
                 })
@@ -234,6 +237,7 @@ export default defineComponent({
             activeTab,
             tabs,
             fileInput,
+            categoryTypes,
             toDate,
             fetchBooks,
             markAsReturned,

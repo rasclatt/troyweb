@@ -10,6 +10,15 @@
     },
     {
         "type": "api",
+        "properName": "BooksSearchable",
+        "route": "/api/books/search",
+        "methods": ["get"],
+        "middleware": [ "decrypt.ids", "encrypt.ids"],
+        "controller": "App\\Http\\Controllers\\BooksSearchableController",
+        "name": "books.searchable"
+    },
+    {
+        "type": "api",
         "properName": "Books",
         "route": "/api/books/{id?}",
         "methods": ["get","delete","update","save"],

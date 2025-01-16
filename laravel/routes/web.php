@@ -32,8 +32,6 @@ Route::get('/dashboard', function ()  {
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/api/books/search', [\App\Http\Controllers\BooksSearchableController::class, 'get'])->middleware(["decrypt.ids", "encrypt.ids"])->name('books.searchable');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

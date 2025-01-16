@@ -5,6 +5,7 @@ use App\Models\Books;
 use Illuminate\Http\Request;
 use \App\Dto\Books\Create\Request as CreateDto;
 use App\Http\Middleware\DecryptIds;
+use App\Http\Middleware\EncryptIds;
 use Illuminate\Support\Facades\Artisan;
 use Inertia\Inertia;
 
@@ -23,7 +24,14 @@ class BooksController extends Controller
             //         }
             //     }
             // }
-            return $this->toSuccessfulResponse($id? Books::getBookById($id, !$request->ajax()) : Books::getAllBooks());
+            return $this->toSuccessfulResponse(...[
+                $id? Books::getBookById($id, !$request->ajax()) : Books::getAllBooks(),
+                false,
+                'data',
+                [
+                    'types' => \App\Models\Books\Types::all(['id', 'title'])
+                ]
+            ]);
         });
     }
     
@@ -62,8 +70,10 @@ class BooksController extends Controller
             if ($id) {
                 $book = Books::findOrFail($id);
                 $book->update($dto);
+                $book->category = EncryptIds::enc($book->category);
             } else {
                 $book = Books::create($dto);
+                $book->category = EncryptIds::enc($book->category);
             }
             Artisan::call('cache:clear');
             return $this->toSuccessfulResponse($book);

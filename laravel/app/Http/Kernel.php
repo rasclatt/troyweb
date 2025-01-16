@@ -22,5 +22,6 @@ class Kernel extends HttpKernel
 
     protected $commands = [
         \App\Console\Commands\FirstRunSetup::class,
+        \App\Console\Commands\AutoPatcher::class,
     ];
 }
