@@ -18,6 +18,10 @@ class Kernel extends HttpKernel
         'encrypt.ids' => \App\Http\Middleware\EncryptIds::class,
         'decrypt.ids' => \App\Http\Middleware\DecryptIds::class,
         'decrypt.ids' => \App\Http\Middleware\DecryptIds::class,
+        'cors.modify' => \App\Http\Middleware\Cors::class,
+    ];
+    protected $middleware = [
+        'cors.modify' => \App\Http\Middleware\Cors::class,
     ];
 
     protected $commands = [

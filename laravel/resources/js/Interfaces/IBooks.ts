@@ -14,7 +14,7 @@ export interface IBook
     updated_at: string;
     average_rating?: number;
     other_attributes?: {
-        role: string;
-        role_id: string;
+        role?: string;
+        role_id?: string;
     };
 }

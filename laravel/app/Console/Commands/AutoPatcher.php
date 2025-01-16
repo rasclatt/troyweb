@@ -3,6 +3,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 
 class AutoPatcher extends Command
 {
@@ -27,8 +28,9 @@ class AutoPatcher extends Command
      */
     public function handle()
     {
-        $baseDir = __DIR__;
+        $baseDir = __DIR__.'/recipes';
         foreach(scandir($baseDir) as $file) {
+            $this->info("Checking {$baseDir}/{$file}...");
             if(stripos($file, 'patch-') !== false) {
                 $recipes = json_decode(file_get_contents("{$baseDir}/{$file}"), true);
                 if($recipes) {
@@ -42,8 +44,16 @@ class AutoPatcher extends Command
                                 Artisan::call('db:seed', ['--class' => $recipe['seed']]);
                                 $this->info("Seeding {$recipe['seed']} complete...");
                             }
+                        } elseif($recipe['type'] === 'sql') {
+                            DB::statement($recipe['command']);
+                            if($recipe['description'])
+                                $this->info("{$recipe['description']}...");
+                            else
+                                $this->info("Query run...");
                         }
                     }
+                    $patchFile = str_replace('patch-', 'patched-'.now(), $file);
+                    rename("{$baseDir}/{$file}", "{$baseDir}/{$patchFile}");
                 }
             }
         }

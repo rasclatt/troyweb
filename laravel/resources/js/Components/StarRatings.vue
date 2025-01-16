@@ -1,5 +1,5 @@
 <template>
-    <font-awesome-icon icon="star" class="text-orange-500" v-for="star in rating" :key="star" />
+    <font-awesome-icon icon="star" class="text-orange-500" v-for="star in Math.floor(rating)" :key="star" />
 </template>
 
 <script lang="ts">

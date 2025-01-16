@@ -13,7 +13,7 @@
                                 <p>by {{ book.author }}</p>
                                 <p v-if="book.average_rating" >{{ book.average_rating }} <font-awesome-icon icon="star" class="text-orange-500" /> Member Rating</p>
                                 <div>
-                                    <button v-if="$page.props.auth.user.other_attributes.role !== 'librarian' && !borrowing && (!book.action || book.action === 'signed_in')" class="text-white mt-4 px-3 py-2 rounded-lg transition duration-300" :class="{'hover:bg-orange-600 bg-orange-500': $page.props.auth.user, 'bg-gray-300 hover:bg-gray-200': !$page.props.auth.user }" :disabled="!$page.props.auth.user" type="button" @click="borrowBook">One-Click Borrow</button>
+                                    <button v-if="$page.props.auth.user?.other_attributes?.role !== 'librarian' && !borrowing && (!book.action || book.action === 'signed_in')" class="text-white mt-4 px-3 py-2 rounded-lg transition duration-300" :class="{'hover:bg-orange-600 bg-orange-500': $page.props.auth.user, 'bg-gray-300 hover:bg-gray-200': !$page.props.auth.user }" :disabled="!$page.props.auth.user" type="button" @click="borrowBook">One-Click Borrow</button>
                                     <div v-if="borrowing" class=" mt-4">
                                         <font-awesome-icon icon="spinner" class="animate-spin text-4xl text-orange-500" />
                                     </div>
